@@ -16,20 +16,20 @@ import java.util.Objects;
 @RequestMapping("/students")
 public class StudentController {
 
-    private final List<Student> students;
+    private final BootStrapData bootStrapData;
 
-    public StudentController(List<Student> students) {
-        this.students = students;
+    public StudentController(BootStrapData bootStrapData) {
+        this.bootStrapData = bootStrapData;
     }
 
     @GetMapping
     public List<Student> getAllStudents() {
-        return students;
+        return bootStrapData.getStudents();
     }
 
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable int id) {
-        return students.stream()
+        return bootStrapData.getStudents().stream()
             .filter(student -> student.getId() == id)
             .parallel()
             .findAny()
@@ -38,10 +38,10 @@ public class StudentController {
 
     @PostMapping
     public void createStudent(@RequestBody Student student) {
-        Student lastStudent = students.get(students.size() - 1);
+        Student lastStudent = bootStrapData.getStudents().get(bootStrapData.getStudents().size() - 1);
         int id = lastStudent.getId() + 1;
         student.setId(id);
-        students.add(student);
+        bootStrapData.getStudents().add(student);
     }
 
     @PutMapping("/{id}")
@@ -50,8 +50,8 @@ public class StudentController {
         if (Objects.isNull(existStudent)) {
             existStudent.setName(student.getName());
             existStudent.setEmail(student.getEmail());
-            int index = students.indexOf(existStudent);
-            students.set(index, existStudent);
+            int index = bootStrapData.getStudents().indexOf(existStudent);
+            bootStrapData.getStudents().set(index, existStudent);
         }
     }
 
@@ -59,7 +59,7 @@ public class StudentController {
     public void deleteStudent(@PathVariable int id) {
         Student existStudent = getStudentById(id);
         if (Objects.nonNull(existStudent)) {
-            students.remove(existStudent);
+            bootStrapData.getStudents().remove(existStudent);
         }
     }
 }

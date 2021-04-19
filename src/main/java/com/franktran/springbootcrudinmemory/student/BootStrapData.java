@@ -1,13 +1,12 @@
 package com.franktran.springbootcrudinmemory.student;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
+@Component
 public class BootStrapData implements CommandLineRunner {
 
     public static List<Student> students;
@@ -20,8 +19,7 @@ public class BootStrapData implements CommandLineRunner {
         students.add(new Student(3, "Bean", "bean@gmail.com"));
     }
 
-    @Bean
-    public List<Student> students() {
+    public List<Student> getStudents() {
         return students;
     }
 }
