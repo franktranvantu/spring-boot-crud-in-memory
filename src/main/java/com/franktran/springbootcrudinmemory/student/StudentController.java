@@ -1,7 +1,14 @@
 package com.franktran.springbootcrudinmemory.student;
 
 import com.franktran.springbootcrudinmemory.SpringBootCrudInMemoryApplication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,16 +17,14 @@ import java.util.Objects;
 @RequestMapping("/students")
 public class StudentController {
 
-    private List<Student> students = SpringBootCrudInMemoryApplication.students;
-
     @GetMapping
     public List<Student> getAllStudents() {
-        return students;
+        return SpringBootCrudInMemoryApplication.students;
     }
 
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable int id) {
-        return students.stream()
+        return SpringBootCrudInMemoryApplication.students.stream()
             .filter(student -> student.getId() == id)
             .parallel()
             .findAny()
@@ -28,10 +33,10 @@ public class StudentController {
 
     @PostMapping
     public void createStudent(@RequestBody Student student) {
-        Student lastStudent = students.get(students.size() - 1);
+        Student lastStudent = SpringBootCrudInMemoryApplication.students.get(SpringBootCrudInMemoryApplication.students.size() - 1);
         int id = lastStudent.getId() + 1;
         student.setId(id);
-        students.add(student);
+        SpringBootCrudInMemoryApplication.students.add(student);
     }
 
     @PutMapping("/{id}")
@@ -40,8 +45,8 @@ public class StudentController {
         if (Objects.isNull(existStudent)) {
             existStudent.setName(student.getName());
             existStudent.setEmail(student.getEmail());
-            int index = students.indexOf(existStudent);
-            students.set(index, existStudent);
+            int index = SpringBootCrudInMemoryApplication.students.indexOf(existStudent);
+            SpringBootCrudInMemoryApplication.students.set(index, existStudent);
         }
     }
 
@@ -49,7 +54,7 @@ public class StudentController {
     public void deleteStudent(@PathVariable int id) {
         Student existStudent = getStudentById(id);
         if (Objects.nonNull(existStudent)) {
-            students.remove(existStudent);
+            SpringBootCrudInMemoryApplication.students.remove(existStudent);
         }
     }
 }
